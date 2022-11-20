@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
+import { User } from 'src/modules/user/user.entity';
 import { ORM_PROVIDER } from '../constants';
 
 export const databaseProviders = [
@@ -14,8 +15,8 @@ export const databaseProviders = [
         host: configService.get('DATABASE_HOST'),
         logging: false,
       });
-      sequelize.addModels([]);
-      await sequelize.sync();
+      sequelize.addModels([User]);
+      await sequelize.sync({ alter: true });
       return sequelize;
     },
     inject: [ConfigService],
