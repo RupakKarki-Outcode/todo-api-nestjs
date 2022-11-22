@@ -13,7 +13,7 @@ import {
 @Table({
   tableName: 'user',
 })
-export class User extends Model {
+export class User extends Model<User> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
