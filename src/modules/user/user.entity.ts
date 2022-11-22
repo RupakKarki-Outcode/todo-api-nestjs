@@ -1,8 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreatedAt,
   DataType,
-  DeletedAt,
   IsEmail,
   Model,
   Table,
@@ -24,18 +24,23 @@ export class User extends Model<User> {
   @Unique
   @IsEmail
   @Column
+  @ApiProperty()
   email: string;
 
+  @Unique
   @Column
+  @ApiProperty()
   username: string;
 
   @Column
+  @ApiProperty()
   password: string;
 
   @Column({
     field: 'full_name',
   })
-  full_name: string;
+  @ApiProperty()
+  fullName: string;
 
   @CreatedAt
   @Column({ field: 'created_at' })
@@ -44,10 +49,4 @@ export class User extends Model<User> {
   @UpdatedAt
   @Column({ field: 'updated_at' })
   updatedAt: Date;
-
-  @DeletedAt
-  @Column({
-    field: 'deleted_at',
-  })
-  deletedAt: Date;
 }

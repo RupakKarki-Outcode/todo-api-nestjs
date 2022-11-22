@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY } from 'src/constants/repositories';
+import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -16,11 +17,18 @@ export class UserService {
 
     return user;
   }
+
   async findUserByUsername(username: string) {
     const user = await this.usersRepository.findOne({
       where: { username: username },
     });
 
     return user;
+  }
+
+  async createUser(user: CreateUserDto) {
+    const newUser = await this.usersRepository.create(user);
+
+    return newUser.toJSON();
   }
 }
