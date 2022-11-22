@@ -9,4 +9,5 @@ interface ConfigType {
   POSTGRES_USER: string;
   DATABASE_TYPE: string;
   DATABASE_HOST: string;
+  JWT_SECRET: string;
 }
