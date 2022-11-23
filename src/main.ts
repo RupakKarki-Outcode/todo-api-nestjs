@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,6 +11,7 @@ async function bootstrap() {
   // of ConfigService as follows, the ConfigType provides types for the environment variables
   const configService = app.get<ConfigService<ConfigType>>(ConfigService);
 
+  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(configService.get('GLOBAL_PREFIX'));
   // to setup swagger, a document needs to be created and built first
   // the document builder builds the configurations for the swagger
@@ -17,6 +19,7 @@ async function bootstrap() {
     .setTitle('Todo & Notes Api')
     .setDescription('The todo & Notes API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   // the swagger module creates a document and sets it up on the given route
