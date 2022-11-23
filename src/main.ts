@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Todo & Notes Api')
     .setDescription('The todo & Notes API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   // the swagger module creates a document and sets it up on the given route
