@@ -1,4 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { ValidationError } from 'sequelize';
 import { USER_REPOSITORY } from 'src/constants/repositories';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from './user.entity';
@@ -27,8 +33,16 @@ export class UserService {
   }
 
   async createUser(user: CreateUserDto) {
-    const newUser = await this.usersRepository.create(user);
+    try {
+      const newUser = await this.usersRepository.create(user);
 
-    return newUser.toJSON();
+      return { id: newUser.dataValues.id };
+    } catch (e: any) {
+      if (e instanceof ValidationError) {
+        throw new BadRequestException(e.errors.map((e) => e.message));
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }
