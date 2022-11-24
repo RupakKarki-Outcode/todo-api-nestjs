@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
+import { TodoGroup } from 'src/modules/todo/entities/todo-group.entity';
 import { User } from 'src/modules/user/user.entity';
 import { ORM_PROVIDER } from '../constants';
 
@@ -15,7 +16,7 @@ export const databaseProviders = [
         host: configService.get('DATABASE_HOST'),
         logging: false,
       });
-      sequelize.addModels([User]);
+      sequelize.addModels([User, TodoGroup]);
       await sequelize.sync({ alter: true });
       return sequelize;
     },
