@@ -12,6 +12,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTodoGroupDto } from './dto/create-todogroup.dto';
+import { UpdateTodoGroupDto } from './dto/update-todogroup.dto';
 import { TodoGroupService } from './todo-group.service';
 
 @Controller('todo-group')
@@ -46,10 +47,10 @@ export class TodoGroupController {
   }
 
   @Patch(':id')
-  @ApiBody({ type: CreateTodoGroupDto })
+  @ApiBody({ type: UpdateTodoGroupDto })
   async updateTodoGroup(
     @Param('id') id: string,
-    @Body() todoGroup: CreateTodoGroupDto,
+    @Body() todoGroup: UpdateTodoGroupDto,
   ) {
     try {
       return this.todoGroupService.updateTodoGroup(id, todoGroup);

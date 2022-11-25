@@ -1,6 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { TODO_GROUP_REPOSITORY } from 'src/constants/repositories';
 import { CreateTodoGroupDto } from './dto/create-todogroup.dto';
+import { UpdateTodoGroupDto } from './dto/update-todogroup.dto';
 import { TodoGroup } from './entities/todo-group.entity';
 
 @Injectable()
@@ -32,7 +33,7 @@ export class TodoGroupService {
     return newTodoGroup;
   }
 
-  async updateTodoGroup(id: string, todoGroup: CreateTodoGroupDto) {
+  async updateTodoGroup(id: string, todoGroup: UpdateTodoGroupDto) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, row] = await this.todoGroupRepository.update(
       { name: todoGroup.name },

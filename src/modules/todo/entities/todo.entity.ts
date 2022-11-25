@@ -1,19 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreatedAt,
   DataType,
-  HasMany,
+  ForeignKey,
   Model,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Todo } from './todo.entity';
+import { TodoGroup } from './todo-group.entity';
 
 @Table({
-  tableName: 'todo_group',
+  tableName: 'todo',
 })
-export class TodoGroup extends Model<TodoGroup> {
+export class Todo extends Model<Todo> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
@@ -21,9 +20,14 @@ export class TodoGroup extends Model<TodoGroup> {
   })
   id: string;
 
-  @Column
-  @ApiProperty()
-  name: string;
+  @Column({
+    type: DataType.TEXT,
+  })
+  todo: string;
+
+  @ForeignKey(() => TodoGroup)
+  @Column({ field: 'todo_group_id', type: DataType.UUID })
+  todoGroupId: string;
 
   @CreatedAt
   @Column({ field: 'created_at' })
@@ -32,7 +36,4 @@ export class TodoGroup extends Model<TodoGroup> {
   @UpdatedAt
   @Column({ field: 'updated_at' })
   updatedAt: Date;
-
-  @HasMany(() => Todo)
-  todo: Todo[];
 }
