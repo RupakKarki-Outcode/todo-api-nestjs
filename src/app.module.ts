@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './core/database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { TodoModule } from './modules/todo/todo.module';
 
 // The config module is imported in the AppModule and set as a global module
 @Module({
@@ -13,6 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
     DatabaseModule,
     UserModule,
     AuthModule,
+    TodoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
