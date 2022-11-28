@@ -1,5 +1,5 @@
 import { TODO_GROUP_REPOSITORY } from 'src/constants/repositories';
-import { TodoGroup } from './entities/todo-group.entity';
+import { TodoGroup } from '../entities/todo-group.entity';
 
 export const todoGroupProvider = [
   {

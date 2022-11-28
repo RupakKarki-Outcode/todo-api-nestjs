@@ -10,10 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { CreateTodoGroupDto } from './dto/create-todogroup.dto';
-import { UpdateTodoGroupDto } from './dto/update-todogroup.dto';
-import { TodoGroupService } from './todo-group.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { CreateTodoGroupDto } from '../dto/create-todogroup.dto';
+import { UpdateTodoGroupDto } from '../dto/update-todogroup.dto';
+import { TodoGroupService } from '../services/todo-group.service';
 
 @Controller('todo-group')
 @ApiTags('todo-group')

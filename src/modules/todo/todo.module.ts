@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TodoGroupController } from './todo-group.controller';
-import { todoGroupProvider } from './todo-group.provider';
-import { TodoGroupService } from './todo-group.service';
-import { TodoController } from './todo.controller';
-import { todoProvider } from './todo.provider';
-import { TodoService } from './todo.service';
+import { TodoGroupController } from './controllers/todo-group.controller';
+import { todoGroupProvider } from './database-providers/todo-group.provider';
+import { TodoGroupService } from './services/todo-group.service';
+import { TodoController } from './controllers/todo.controller';
+import { todoProvider } from './database-providers/todo.provider';
+import { TodoService } from './services/todo.service';
 
 @Module({
   controllers: [TodoController, TodoGroupController],
