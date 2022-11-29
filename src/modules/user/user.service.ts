@@ -1,32 +1,25 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
-import { ValidationError } from 'sequelize';
-import { USER_REPOSITORY } from 'src/constants/repositories';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(USER_REPOSITORY)
-    private usersRepository: typeof User,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   async findUserById(id: string) {
-    const user = await this.usersRepository.findByPk(id, {
-      attributes: { exclude: ['password'] },
-    });
+    const user = await this.usersRepository.findOneBy({ id: id });
 
     return user;
   }
 
   async findUserByUsername(username: string) {
-    const user = await this.usersRepository.findOne({
-      where: { username: username },
+    const user = await this.usersRepository.findOneBy({
+      username: username,
     });
 
     return user;
@@ -34,15 +27,11 @@ export class UserService {
 
   async createUser(user: CreateUserDto) {
     try {
-      const newUser = await this.usersRepository.create(user);
+      const newUser = this.usersRepository.create(user);
 
-      return { id: newUser.dataValues.id };
+      return { id: newUser.id };
     } catch (e: any) {
-      if (e instanceof ValidationError) {
-        throw new BadRequestException(e.errors.map((e) => e.message));
-      } else {
-        throw new InternalServerErrorException();
-      }
+      throw new InternalServerErrorException();
     }
   }
 }

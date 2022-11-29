@@ -20,7 +20,7 @@ export class AuthService {
 
     if (isMatch) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...rest } = user.dataValues;
+      const { password, ...rest } = user;
       return rest;
     }
 

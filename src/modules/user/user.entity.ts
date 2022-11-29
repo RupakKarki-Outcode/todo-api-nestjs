@@ -1,52 +1,42 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail } from 'class-validator';
 import {
   Column,
-  CreatedAt,
-  DataType,
-  IsEmail,
-  Model,
-  Table,
-  Unique,
-  UpdatedAt,
-} from 'sequelize-typescript';
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Table({
-  tableName: 'user',
-})
-export class User extends Model<User> {
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-    primaryKey: true,
-  })
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Unique
-  @IsEmail
-  @Column
+  @Column({ name: 'email' })
   @ApiProperty()
+  @IsEmail()
   email: string;
 
-  @Unique
-  @Column
+  @Column({ name: 'username' })
   @ApiProperty()
   username: string;
 
-  @Column
+  @Column({ select: false })
   @ApiProperty()
   password: string;
 
   @Column({
-    field: 'full_name',
+    name: 'full_name',
   })
   @ApiProperty()
   fullName: string;
 
-  @CreatedAt
-  @Column({ field: 'created_at' })
+  @CreateDateColumn()
+  @Column({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdatedAt
-  @Column({ field: 'updated_at' })
+  @UpdateDateColumn()
+  @Column({ name: 'updated_at' })
   updatedAt: Date;
 }
