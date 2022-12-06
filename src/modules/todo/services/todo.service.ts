@@ -1,28 +1,27 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { TODO_REPOSITORY } from 'src/constants/repositories';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { Todo } from '../entities/todo.entity';
 
 @Injectable()
 export class TodoService {
   constructor(
-    @Inject(TODO_REPOSITORY)
-    private todoRepository: typeof Todo,
+    @InjectRepository(Todo)
+    private todoRepository: Repository<Todo>,
   ) {}
 
   // creates a new todo
   async createTodo(todo: CreateTodoDto) {
-    const newTodo = await this.todoRepository.create(todo);
+    const newTodo = this.todoRepository.create(todo);
 
     return newTodo;
   }
 
   // gets all todos within a todo group
   async getTodos(groupId: string) {
-    const todos = await this.todoRepository.findAll({
-      where: {
-        todoGroupId: groupId,
-      },
+    const todos = await this.todoRepository.find({
+      where: { todoGroup: { id: groupId } },
     });
 
     return todos;
@@ -30,23 +29,12 @@ export class TodoService {
 
   // update todo
   async updateTodo(todoId: string, todo: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, row] = await this.todoRepository.update(
-      { todo: todo },
-      {
-        where: {
-          id: todoId,
-        },
-        returning: true,
-      },
-    );
-
-    return row[0];
+    return await this.todoRepository.update({ id: todoId }, { todo: todo });
   }
 
   // get single todo
   async getTodo(todoId: string) {
-    const todo = await this.todoRepository.findByPk(todoId);
+    const todo = await this.todoRepository.findOneBy({ id: todoId });
 
     console.log('TODO', todo);
 
@@ -55,6 +43,6 @@ export class TodoService {
 
   // delete todo
   async deleteTodo(todoId: string) {
-    await this.todoRepository.destroy({ where: { id: todoId } });
+    await this.todoRepository.delete({ id: todoId });
   }
 }

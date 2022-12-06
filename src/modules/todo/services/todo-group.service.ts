@@ -1,5 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { TODO_GROUP_REPOSITORY } from 'src/constants/repositories';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTodoGroupDto } from '../dto/create-todogroup.dto';
 import { UpdateTodoGroupDto } from '../dto/update-todogroup.dto';
 import { TodoGroup } from '../entities/todo-group.entity';
@@ -7,18 +8,18 @@ import { TodoGroup } from '../entities/todo-group.entity';
 @Injectable()
 export class TodoGroupService {
   constructor(
-    @Inject(TODO_GROUP_REPOSITORY)
-    private todoGroupRepository: typeof TodoGroup,
+    @InjectRepository(TodoGroup)
+    private todoGroupRepository: Repository<TodoGroup>,
   ) {}
 
   async getTodoGroups() {
-    const todoGroups = await this.todoGroupRepository.findAll();
+    const todoGroups = await this.todoGroupRepository.find();
 
     return todoGroups;
   }
 
   async getTodoById(id: string) {
-    const todoGroup = await this.todoGroupRepository.findByPk(id);
+    const todoGroup = await this.todoGroupRepository.findOneBy({ id: id });
 
     if (!todoGroup) {
       throw new NotFoundException();
@@ -28,31 +29,20 @@ export class TodoGroupService {
   }
 
   async createTodoGroup(todoGroup: CreateTodoGroupDto) {
-    const newTodoGroup = await this.todoGroupRepository.create(todoGroup);
+    const newTodoGroup = this.todoGroupRepository.save(todoGroup);
 
     return newTodoGroup;
   }
 
   async updateTodoGroup(id: string, todoGroup: UpdateTodoGroupDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, row] = await this.todoGroupRepository.update(
+    const updated = await this.todoGroupRepository.update(
+      { id: id },
       { name: todoGroup.name },
-      {
-        where: {
-          id: id,
-        },
-        returning: true,
-      },
     );
-
-    return row[0];
+    return updated;
   }
 
   async deleteTodoGroup(id: string) {
-    await this.todoGroupRepository.destroy({
-      where: {
-        id: id,
-      },
-    });
+    await this.todoGroupRepository.delete({ id: id });
   }
 }

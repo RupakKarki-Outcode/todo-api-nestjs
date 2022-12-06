@@ -1,28 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'email' })
+  @Column({ name: 'email', unique: true })
   @ApiProperty()
   @IsEmail()
   email: string;
 
-  @Column({ name: 'username' })
+  @Column({ name: 'username', unique: true })
   @ApiProperty()
   username: string;
 
-  @Column({ select: false })
+  @Column()
   @ApiProperty()
   password: string;
 
@@ -32,11 +26,18 @@ export class User {
   @ApiProperty()
   fullName: string;
 
-  @CreateDateColumn()
-  @Column({ name: 'created_at' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
-  @Column({ name: 'updated_at' })
+  @Column({
+    type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt: Date;
 }

@@ -1,38 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreatedAt,
-  DataType,
-  HasMany,
-  Model,
-  Table,
-  UpdatedAt,
-} from 'sequelize-typescript';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Todo } from './todo.entity';
 
-@Table({
-  tableName: 'todo_group',
-})
-export class TodoGroup extends Model<TodoGroup> {
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-    primaryKey: true,
-  })
+@Entity({ name: 'todo_group' })
+export class TodoGroup {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column
+  @Column()
   @ApiProperty()
   name: string;
 
-  @CreatedAt
-  @Column({ field: 'created_at' })
+  @OneToMany(() => Todo, (todo) => todo.id)
+  todos: Todo[];
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @UpdatedAt
-  @Column({ field: 'updated_at' })
+  @Column({
+    type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    nullable: true,
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
-
-  @HasMany(() => Todo)
-  todo: Todo[];
 }

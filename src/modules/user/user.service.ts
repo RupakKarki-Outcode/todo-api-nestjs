@@ -27,9 +27,10 @@ export class UserService {
 
   async createUser(user: CreateUserDto) {
     try {
-      const newUser = this.usersRepository.create(user);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...rest } = await this.usersRepository.save(user);
 
-      return { id: newUser.id };
+      return rest;
     } catch (e: any) {
       throw new InternalServerErrorException();
     }

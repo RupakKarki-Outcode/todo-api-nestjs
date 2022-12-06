@@ -1,39 +1,29 @@
-import {
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-  UpdatedAt,
-} from 'sequelize-typescript';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TodoGroup } from './todo-group.entity';
 
-@Table({
-  tableName: 'todo',
-})
-export class Todo extends Model<Todo> {
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-    primaryKey: true,
-  })
+@Entity()
+export class Todo {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: DataType.TEXT,
-  })
+  @Column()
   todo: string;
 
-  @ForeignKey(() => TodoGroup)
-  @Column({ field: 'todo_group_id', type: DataType.UUID })
-  todoGroupId: string;
+  @ManyToOne(() => TodoGroup, (todoGroup) => todoGroup.todos)
+  todoGroup: TodoGroup;
 
-  @CreatedAt
-  @Column({ field: 'created_at' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @UpdatedAt
-  @Column({ field: 'updated_at' })
+  @Column({
+    type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt: Date;
 }
