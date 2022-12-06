@@ -26,6 +26,9 @@ export class User {
   @ApiProperty()
   fullName: string;
 
+  @Column()
+  address: string;
+
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
