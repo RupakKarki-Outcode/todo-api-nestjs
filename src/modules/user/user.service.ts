@@ -32,6 +32,7 @@ export class UserService {
 
       return rest;
     } catch (e: any) {
+      console.log(e);
       throw new InternalServerErrorException();
     }
   }
