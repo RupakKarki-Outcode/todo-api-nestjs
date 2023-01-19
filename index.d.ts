@@ -10,4 +10,6 @@ interface ConfigType {
   DATABASE_TYPE: string;
   DATABASE_HOST: string;
   JWT_SECRET: string;
+  SWAGGER_USER: string;
+  SWAGGER_PASSWORD: string;
 }

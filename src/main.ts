@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as basicAuth from 'express-basic-auth';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,6 +12,18 @@ async function bootstrap() {
   // since the app is created using the NestFactory module, we can get the instance
   // of ConfigService as follows, the ConfigType provides types for the environment variables
   const configService = app.get<ConfigService<ConfigType>>(ConfigService);
+
+  // securing swagger
+  app.use(
+    ['/docs', '/docs-json'],
+    basicAuth({
+      challenge: true,
+      users: {
+        [configService.get('SWAGGER_USER')]:
+          configService.get('SWAGGER_PASSWORD'),
+      },
+    }),
+  );
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(configService.get('GLOBAL_PREFIX'));
