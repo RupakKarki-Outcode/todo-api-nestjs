@@ -17,4 +17,8 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   fullName: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  address: string;
 }
