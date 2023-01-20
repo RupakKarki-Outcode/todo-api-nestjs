@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserExistsException } from 'src/exceptions';
 import { Repository } from 'typeorm';
+import { UserExistsException } from '../../exceptions';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from './user.entity';
 
@@ -37,5 +37,11 @@ export class UserService {
         throw new UserExistsException();
       } else throw new InternalServerErrorException();
     }
+  }
+
+  async findUserRoles(userId: string) {
+    const user = await this.findUserById(userId);
+
+    return user.role;
   }
 }
