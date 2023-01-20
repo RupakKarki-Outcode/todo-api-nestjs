@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserExistsException } from 'src/exceptions';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from './user.entity';
@@ -32,8 +33,9 @@ export class UserService {
 
       return rest;
     } catch (e: any) {
-      console.log(e);
-      throw new InternalServerErrorException();
+      if (e.code === '23505') {
+        throw new UserExistsException();
+      } else throw new InternalServerErrorException();
     }
   }
 }

@@ -38,7 +38,7 @@ export class User {
 
   @Column({
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    onUpdate: '() => CURRENT_TIMESTAMP',
     nullable: true,
     name: 'updated_at',
   })
