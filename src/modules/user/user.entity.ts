@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from '../../common';
 
 @Entity()
 export class User {
@@ -35,6 +36,13 @@ export class User {
     name: 'created_at',
   })
   createdAt: Date;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
 
   @Column({
     type: 'timestamp',

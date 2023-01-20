@@ -10,7 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { Role } from '../../../common';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { RolesGuard } from '../../auth/guards/role.guard';
+import { HasRoles } from '../../auth/has-roles.decorator';
 import { CreateTodoGroupDto } from '../dto/create-todogroup.dto';
 import { UpdateTodoGroupDto } from '../dto/update-todogroup.dto';
 import { TodoGroupService } from '../services/todo-group.service';
@@ -18,10 +21,11 @@ import { TodoGroupService } from '../services/todo-group.service';
 @Controller('todo-group')
 @ApiTags('todo-group')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class TodoGroupController {
   constructor(private todoGroupService: TodoGroupService) {}
 
+  @HasRoles(Role.ADMIN)
   @Get()
   async getTodoGroups() {
     try {
