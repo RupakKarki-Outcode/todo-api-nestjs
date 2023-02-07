@@ -3,6 +3,10 @@ version: '3.9'
 services:
   postgres:
     image: postgres:alpine
+    networks:
+      - postgres
+    volumes:
+      - ./data/postgres:/data/postgres
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
@@ -10,8 +14,19 @@ services:
     ports:
       - 5432:5432
 
-  adminer:
-    image: adminer
-    restart: always
+  nestjs-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
-      - 8080:8080
+      - '4005:3000'
+    depends_on:
+      - postgres
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
