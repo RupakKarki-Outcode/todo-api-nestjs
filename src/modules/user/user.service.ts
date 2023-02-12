@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserExistsException } from '../../exceptions';
@@ -7,6 +11,8 @@ import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -33,6 +39,7 @@ export class UserService {
 
       return rest;
     } catch (e: any) {
+      this.logger.error(e);
       if (e.code === '23505') {
         throw new UserExistsException();
       } else throw new InternalServerErrorException();
