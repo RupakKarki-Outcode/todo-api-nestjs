@@ -10,7 +10,7 @@ services:
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=todo-nestjs
+      - POSTGRES_DB=nestjs-api
     ports:
       - 5432:5432
 
