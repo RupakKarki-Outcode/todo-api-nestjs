@@ -14,21 +14,21 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string) {
-    const user = await this.usersService.findUserByUsername(username);
+    try {
+      const user = await this.usersService.findUserByUsername(username);
 
-    if (!user) {
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (isMatch) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...rest } = user;
+        return rest;
+      }
+
+      return null;
+    } catch (e: any) {
       throw new NotFoundException();
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (isMatch) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...rest } = user;
-      return rest;
-    }
-
-    return null;
   }
 
   // login user
