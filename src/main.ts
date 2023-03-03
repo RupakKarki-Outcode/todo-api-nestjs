@@ -19,7 +19,7 @@ async function bootstrap() {
 
   // securing swagger
   app.use(
-    ['/api/docs', '/api/docs-json'],
+    ['/docs', '/docs-json'],
     basicAuth({
       challenge: true,
       users: {
