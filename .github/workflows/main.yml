@@ -34,7 +34,7 @@ jobs:
           with:
               node-version: ${{ matrix.node-version }}
         - run: rm -rf node_modules
-        - run: yarn install
+        - run: npm install
         - run: cp /home/azureuser .env
         - run: sudo docker compose stop && sudo docker compose up --build -d
         - run: sudo docker exec nestjs-api yarn migration:run
